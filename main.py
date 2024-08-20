@@ -15,7 +15,7 @@ class Bird(Animal):
         self.color = color
 
     def make_sound(self):
-        return 'Twitt Twitt'
+        return 'Canary makes Twitt Twitt'
 
 class Mammal(Animal):
     def __init__(self, name, age, size):
@@ -23,7 +23,7 @@ class Mammal(Animal):
         self.size = size
 
     def make_sound(self):
-        return 'Roar'
+        return 'Lion makes roar'
 
 class Reptile(Animal):
     def __init__(self, name, age, habitat):
@@ -31,7 +31,7 @@ class Reptile(Animal):
         self.habitat = habitat
 
     def make_sound(self):
-        return 'Hiss'
+        return 'Snake makes hiss'
 
 def animal_sound(animals):
     for animal in animals:
@@ -53,6 +53,8 @@ class Veterinarian(Worker):
     def heal_animal(self, animal):
         print(f'{self.name} is healing {animal.name}')
 
+import pickle
+
 class Zoo:
     def __init__(self, name):
         self.name = name
@@ -73,6 +75,20 @@ class Zoo:
                 for animal in self.animals:
                     worker.feed_animal(animal)
 
+    def save_to_file(self, filename):
+        """Сохраняет текущее состояние зоопарка в файл."""
+        with open(filename, 'wb') as file:
+            pickle.dump(self, file)
+        print(f"Zoo state saved to {filename}")
+
+    @staticmethod
+    def load_from_file(filename):
+        """Загружает состояние зоопарка из файла."""
+        with open(filename, 'rb') as file:
+            zoo = pickle.load(file)
+        print(f"Zoo state loaded from {filename}")
+        return zoo
+
     def heal_all_animals(self):
         for worker in self.workers:
             if isinstance(worker, Veterinarian):
@@ -80,7 +96,7 @@ class Zoo:
                     worker.heal_animal(animal)
 
 # Создание объектов животных
-bird = Bird("Parrot", 3, "Green")
+bird = Bird("Canary", 3, "Yellow")
 mammal = Mammal("Lion", 5, "Large")
 reptile = Reptile("Snake", 2, "Desert")
 
@@ -89,7 +105,7 @@ zookeeper = Zookeeper("John", 35)
 vet = Veterinarian("Emily", 40)
 
 # Создание зоопарка
-zoo = Zoo("City Zoo")
+zoo = Zoo("KoenigZoo")
 
 # Добавление животных и сотрудников в зоопарк
 zoo.add_animal(bird)
@@ -106,3 +122,9 @@ zoo.feed_all_animals()
 
 # Лечение всех животных
 zoo.heal_all_animals()
+
+# Сохранение состояния зоопарка в файл
+zoo.save_to_file("zoo_state.pkl")
+
+# Восстановление состояния зоопарка из файла
+# loaded_zoo = Zoo.load_from_file("zoo_state.pkl")
