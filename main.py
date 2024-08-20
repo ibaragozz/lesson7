@@ -1,27 +1,13 @@
-class Zoo():
-    def __init__(self, name, animals, zookeeper, veterinarian):
-        self.name = name
-        self.animals = animals
-        self.zookeeper = zookeeper
-        self.veterinarian = veterinarian
-        self.name = 'KoenigZoo'
-
-    def add_animal(self, new_animal):
-        self.animals.append(new_animal)
-
-    def get_animals(self):
-        return self.animals
-
-class Animal():
+class Animal:
     def __init__(self, name, age):
         self.name = name
-        self.species = age
+        self.age = age
 
     def make_sound(self):
         pass
 
     def eat(self):
-        pass
+        print(f"{self.name} is eating.")
 
 class Bird(Animal):
     def __init__(self, name, age, color):
@@ -47,3 +33,76 @@ class Reptile(Animal):
     def make_sound(self):
         return 'Hiss'
 
+def animal_sound(animals):
+    for animal in animals:
+        print(animal.make_sound())
+
+class Worker:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def work(self):
+        pass
+
+class Zookeeper(Worker):
+    def feed_animal(self, animal):
+        print(f'{self.name} is feeding {animal.name}')
+
+class Veterinarian(Worker):
+    def heal_animal(self, animal):
+        print(f'{self.name} is healing {animal.name}')
+
+class Zoo:
+    def __init__(self, name):
+        self.name = name
+        self.animals = []
+        self.workers = []
+
+    def add_animal(self, animal):
+        self.animals.append(animal)
+        print(f'Added {animal.name} to the zoo')
+
+    def add_worker(self, worker):
+        self.workers.append(worker)
+        print(f'Added {worker.name} to the zoo')
+
+    def feed_all_animals(self):
+        for worker in self.workers:
+            if isinstance(worker, Zookeeper):
+                for animal in self.animals:
+                    worker.feed_animal(animal)
+
+    def heal_all_animals(self):
+        for worker in self.workers:
+            if isinstance(worker, Veterinarian):
+                for animal in self.animals:
+                    worker.heal_animal(animal)
+
+# Создание объектов животных
+bird = Bird("Parrot", 3, "Green")
+mammal = Mammal("Lion", 5, "Large")
+reptile = Reptile("Snake", 2, "Desert")
+
+# Создание объектов сотрудников
+zookeeper = Zookeeper("John", 35)
+vet = Veterinarian("Emily", 40)
+
+# Создание зоопарка
+zoo = Zoo("City Zoo")
+
+# Добавление животных и сотрудников в зоопарк
+zoo.add_animal(bird)
+zoo.add_animal(mammal)
+zoo.add_animal(reptile)
+zoo.add_worker(zookeeper)
+zoo.add_worker(vet)
+
+# Демонстрация полиморфизма
+animal_sound(zoo.animals)
+
+# Кормление всех животных
+zoo.feed_all_animals()
+
+# Лечение всех животных
+zoo.heal_all_animals()
